@@ -639,6 +639,13 @@ namespace ArcadeMIDI {
 //% color="#FFB200"
 //% icon="\uF001"
 namespace ArcadeMIDIBlocks {
+    export enum ThreadLocation {
+        //% block="in background"
+        Background,
+        //% block="in main thread"
+        MainThread
+    }
+
     export class ArcadeMIDIBlocksWrapper {
         private _parser: ArcadeMIDI.ArcadeMIDIImageParser.ArcadeMIDIImageParser;
         private _player: ArcadeMIDI.ArcadeMIDIImageFramePlayer.ArcadeMIDIMultiImageFramePlayer;
@@ -655,7 +662,7 @@ namespace ArcadeMIDIBlocks {
          * 
          * @param images The images to set in the queue.
          */
-        //% block="set queue of %ArcadeMIDIBlocksWrapper(player) to %images"
+        //% block="%ArcadeMIDIBlocksWrapper(player) set queue to %images"
         //% images.shadow=animation_editor
         //% weight=90
         set_images(images: Image[]): void {
@@ -668,10 +675,22 @@ namespace ArcadeMIDIBlocks {
          * 
          * @return The images.
          */
-        //% block="get queue of %ArcadeMIDIBlocksWrapper(player)"
+        //% block="%ArcadeMIDIBlocksWrapper(player) get queue"
         //% weight=80
         get_images(): Image[] {
             return this._parser.queue;
+        }
+
+        /**
+         * Play what we have in queue.
+         * 
+         * @param in_bg Whether to play in a seperate thread or not. Defaults to true.
+         */
+        //% block="%ArcadeMIDIBlocksWrapper(player) play || %in_bg"
+        //% expandableArgumentMode="toggle"
+        //% weight=70
+        play(thread_loc: ThreadLocation = ThreadLocation.Background): void {
+            this._player.play(thread_loc == ThreadLocation.Background /* true to play in background */);
         }
     }
 
