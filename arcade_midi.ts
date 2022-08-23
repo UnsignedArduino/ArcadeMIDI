@@ -464,7 +464,7 @@ namespace ArcadeMIDI {
                 this._pls_pause = false;
                 this._actually_paused = false;
                 this._pls_stop = false;
-                this._actually_stopped = false;
+                this._actually_stopped = true;
             }
 
             /**
@@ -617,6 +617,11 @@ namespace ArcadeMIDI {
              */
             play(in_bg: boolean = false): void {
                 const play_all = (): void => {
+                    this.stopped = true;
+                    while (!this.stopped) {
+                        pause(20);
+                    }
+
                     for (const frame of this._frames) {
                         this._driver.play(frame);
                         if (this._driver.stopped) {
@@ -684,9 +689,9 @@ namespace ArcadeMIDIBlocks {
         /**
          * Play what we have in queue.
          * 
-         * @param in_bg Whether to play in a seperate thread or not. Defaults to true.
+         * @param thread_loc The location on which to play the thread. Defaults to ThreadLocation.Background.
          */
-        //% block="%ArcadeMIDIBlocksWrapper(player) play || %in_bg"
+        //% block="%ArcadeMIDIBlocksWrapper(player) play || %thread_loc"
         //% expandableArgumentMode="toggle"
         //% weight=70
         play(thread_loc: ThreadLocation = ThreadLocation.Background): void {
