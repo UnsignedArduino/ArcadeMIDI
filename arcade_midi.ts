@@ -573,6 +573,7 @@ namespace ArcadeMIDI {
              */
             set frames(new_frames: ArcadeMIDI.ArcadeMIDIImageParser.ArcadeMIDIImageFrame[]) {
                 this._frames = new_frames;
+                this.stopped = true;
             }
 
             /**
@@ -638,9 +639,46 @@ namespace ArcadeMIDI {
 //% color="#FFB200"
 //% icon="\uF001"
 namespace ArcadeMIDIBlocks {
+    export class ArcadeMIDIBlocksWrapper {
+        private _parser: ArcadeMIDI.ArcadeMIDIImageParser.ArcadeMIDIImageParser;
+        private _player: ArcadeMIDI.ArcadeMIDIImageFramePlayer.ArcadeMIDIMultiImageFramePlayer;
+        private _images: Image[];
+        private _frames: ArcadeMIDI.ArcadeMIDIImageParser.ArcadeMIDIImageFrame[];
+
+        constructor() {
+            this._parser = new ArcadeMIDI.ArcadeMIDIImageParser.ArcadeMIDIImageParser();
+            this._player = new ArcadeMIDI.ArcadeMIDIImageFramePlayer.ArcadeMIDIMultiImageFramePlayer();
+        }
+
+        /**
+         * Set the images. Note, this will cause a frame recompute and may take a long time!
+         * 
+         * @param images The images to set in the queue.
+         */
+        //% block="set queue of %ArcadeMIDIBlocksWrapper(player) to %images"
+        //% images.shadow=animation_editor
+        //% weight=90
+        set_images(images: Image[]): void {
+            this._parser.queue = images;
+            this._player.frames = this._parser.frames;
+        }
+
+        /**
+         * Get the images.
+         * 
+         * @return The images.
+         */
+        //% block="get queue of %ArcadeMIDIBlocksWrapper(player)"
+        //% weight=80
+        get_images(): Image[] {
+            return this._parser.queue;
+        }
+    }
+
     //% block="create player"
     //% blockSetVariable=player
-    export function create_player(): ArcadeMIDI.ArcadeMIDIImageFramePlayer.ArcadeMIDIMultiImageFramePlayer {
-        return new ArcadeMIDI.ArcadeMIDIImageFramePlayer.ArcadeMIDIMultiImageFramePlayer();
+    //% weight=100
+    export function create_wrapper(): ArcadeMIDIBlocks.ArcadeMIDIBlocksWrapper {
+        return new ArcadeMIDIBlocks.ArcadeMIDIBlocksWrapper();
     }
 }
