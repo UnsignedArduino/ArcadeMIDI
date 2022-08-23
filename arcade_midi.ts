@@ -697,6 +697,50 @@ namespace ArcadeMIDIBlocks {
         play(thread_loc: ThreadLocation = ThreadLocation.Background): void {
             this._player.play(thread_loc == ThreadLocation.Background /* true to play in background */);
         }
+
+        /**
+         * Stop the player.
+         */
+        //% block="%ArcadeMIDIBlocksWrapper(player) stop"
+        //% weight=60
+        stop(): void {
+            this._player.stopped = true;
+        }
+
+        /**
+         * Get whether we are stopped or not. 
+         * 
+         * @return Whether we are not playing or not.
+         */
+        //% block="%ArcadeMIDIBlocksWrapper(player) is stopped"
+        //% weight=50
+        is_stopped(): boolean {
+            return this._player.stopped;
+        }
+        
+
+        /**
+         * Set whether we are paused or not. Note, this will only take effect on the next note.
+         * 
+         * @param new_state Whether we are paused or not. 
+         */
+        //% block="%ArcadeMIDIBlocksWrapper(player) set paused to %state"
+        //% state.defl=true
+        //% weight=40
+        set_paused(state: boolean = true): void {
+            this._player.paused = state;
+        }
+
+        /**
+         * Get whether we are paused or not.
+         * 
+         * @return Whether we are actually paused or not.
+         */
+        //% block="%ArcadeMIDIBlocksWrapper(player) get is paused"
+        //% weight=30
+        is_paused(): boolean {
+            return this._player.paused;
+        }
     }
 
     //% block="create player"
