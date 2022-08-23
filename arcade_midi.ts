@@ -1,5 +1,3 @@
-//% blockNamespace="Arcade MIDI"
-//% color="#FFB200"
 namespace ArcadeMIDI {
     let DEBUG_PARSING: boolean = false;
     let DEBUG_PLAYING: boolean = false;
@@ -633,5 +631,16 @@ namespace ArcadeMIDI {
                 }
             }
         }
+    }
+}
+
+//% block="Arcade MIDI"
+//% color="#FFB200"
+//% icon="\uF001"
+namespace ArcadeMIDIBlocks {
+    //% block="create player"
+    //% blockSetVariable=player
+    export function create_player(): ArcadeMIDI.ArcadeMIDIImageFramePlayer.ArcadeMIDIMultiImageFramePlayer {
+        return new ArcadeMIDI.ArcadeMIDIImageFramePlayer.ArcadeMIDIMultiImageFramePlayer();
     }
 }
